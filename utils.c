@@ -1,94 +1,65 @@
 #include <math.h>
 #include "xterm2ansi.h"
 
-const char *xterm_hex_colors[] = {
-    "#000000", "#800000", "#008000", "#808000", "#000080", "#800080", 
-    "#008080", "#c0c0c0", "#808080", "#ff0000", "#00ff00", "#ffff00", 
-    "#0000ff", "#ff00ff", "#00ffff", "#ffffff", "#000000", "#00005f", 
-    "#000087", "#0000af", "#0000d7", "#0000ff", "#005f00", "#005f5f", 
-    "#005f87", "#005faf", "#005fd7", "#005fff", "#008700", "#00875f", 
-    "#008787", "#0087af", "#0087d7", "#0087ff", "#00af00", "#00af5f", 
-    "#00af87", "#00afaf", "#00afd7", "#00afff", "#00d700", "#00d75f", 
-    "#00d787", "#00d7af", "#00d7d7", "#00d7ff", "#00ff00", "#00ff5f", 
-    "#00ff87", "#00ffaf", "#00ffd7", "#00ffff", "#5f0000", "#5f005f", 
-    "#5f0087", "#5f00af", "#5f00d7", "#5f00ff", "#5f5f00", "#5f5f5f", 
-    "#5f5f87", "#5f5faf", "#5f5fd7", "#5f5fff", "#5f8700", "#5f875f", 
-    "#5f8787", "#5f87af", "#5f87d7", "#5f87ff", "#5faf00", "#5faf5f", 
-    "#5faf87", "#5fafaf", "#5fafd7", "#5fafff", "#5fd700", "#5fd75f", 
-    "#5fd787", "#5fd7af", "#5fd7d7", "#5fd7ff", "#5fff00", "#5fff5f", 
-    "#5fff87", "#5fffaf", "#5fffd7", "#5fffff", "#870000", "#87005f", 
-    "#870087", "#8700af", "#8700d7", "#8700ff", "#875f00", "#875f5f", 
-    "#875f87", "#875faf", "#875fd7", "#875fff", "#878700", "#87875f", 
-    "#878787", "#8787af", "#8787d7", "#8787ff", "#87af00", "#87af5f", 
-    "#87af87", "#87afaf", "#87afd7", "#87afff", "#87d700", "#87d75f", 
-    "#87d787", "#87d7af", "#87d7d7", "#87d7ff", "#87ff00", "#87ff5f", 
-    "#87ff87", "#87ffaf", "#87ffd7", "#87ffff", "#af0000", "#af005f", 
-    "#af0087", "#af00af", "#af00d7", "#af00ff", "#af5f00", "#af5f5f", 
-    "#af5f87", "#af5faf", "#af5fd7", "#af5fff", "#af8700", "#af875f", 
-    "#af8787", "#af87af", "#af87d7", "#af87ff", "#afaf00", "#afaf5f", 
-    "#afaf87", "#afafaf", "#afafd7", "#afafff", "#afd700", "#afd75f", 
-    "#afd787", "#afd7af", "#afd7d7", "#afd7ff", "#afff00", "#afff5f", 
-    "#afff87", "#afffaf", "#afffd7", "#afffff", "#d70000", "#d7005f", 
-    "#d70087", "#d700af", "#d700d7", "#d700ff", "#d75f00", "#d75f5f", 
-    "#d75f87", "#d75faf", "#d75fd7", "#d75fff", "#d78700", "#d7875f", 
-    "#d78787", "#d787af", "#d787d7", "#d787ff", "#d7af00", "#d7af5f", 
-    "#d7af87", "#d7afaf", "#d7afd7", "#d7afff", "#d7d700", "#d7d75f", 
-    "#d7d787", "#d7d7af", "#d7d7d7", "#d7d7ff", "#d7ff00", "#d7ff5f", 
-    "#d7ff87", "#d7ffaf", "#d7ffd7", "#d7ffff", "#ff0000", "#ff005f", 
-    "#ff0087", "#ff00af", "#ff00d7", "#ff00ff", "#ff5f00", "#ff5f5f", 
-    "#ff5f87", "#ff5faf", "#ff5fd7", "#ff5fff", "#ff8700", "#ff875f", 
-    "#ff8787", "#ff87af", "#ff87d7", "#ff87ff", "#ffaf00", "#ffaf5f", 
-    "#ffaf87", "#ffafaf", "#ffafd7", "#ffafff", "#ffd700", "#ffd75f", 
-    "#ffd787", "#ffd7af", "#ffd7d7", "#ffd7ff", "#ffff00", "#ffff5f", 
-    "#ffff87", "#ffffaf", "#ffffd7", "#ffffff", "#080808", "#121212", 
-    "#1c1c1c", "#262626", "#303030", "#3a3a3a", "#444444", "#4e4e4e", 
-    "#585858", "#626262", "#6c6c6c", "#767676", "#808080", "#8a8a8a", 
-    "#949494", "#9e9e9e", "#a8a8a8", "#b2b2b2", "#bcbcbc", "#c6c6c6", 
-    "#d0d0d0", "#dadada", "#e4e4e4", "#eeeeee"
+static const Color ansi_colors[] = {
+    {0x00, 0x00, 0x00, 30}, /* black */
+    {0xCD, 0x00, 0x00, 31}, /* red */
+    {0x00, 0xCD, 0x00, 32}, /* green */
+    {0xCD, 0xCD, 0x00, 33}, /* yellow */
+    {0x00, 0x00, 0xEE, 34}, /* blue */
+    {0xCD, 0x00, 0xCD, 35}, /* magenta */
+    {0x00, 0xCD, 0xCD, 36}, /* cyan */
+    {0xE5, 0xE5, 0xE5, 37}, /* white */
+    {0x7F, 0x7F, 0x7F, 90}, /* bright black */
+    {0xFF, 0x00, 0x00, 91}, /* bright red */
+    {0x00, 0xFF, 0x00, 92}, /* bright green */
+    {0xFF, 0xFF, 0x00, 93}, /* bright yellow */
+    {0x5C, 0x5C, 0xFF, 94}, /* bright blue */
+    {0xFF, 0x00, 0xFF, 95}, /* bright magenta */
+    {0x00, 0xFF, 0xFF, 96}, /* bright cyan */
+    {0xFF, 0xFF, 0xFF, 97}  /* bright white */
 };
 
-int hex_to_decimal(char hex) {
-  return hex - (hex > '9' ? 'a' - 10 : '0');
+/* from xterm's 256colres.pl */
+void xterm_to_rgb(int color, int *r, int *g, int *b) {
+    if (color < 16) {
+        *r = ansi_colors[color].r;
+        *g = ansi_colors[color].g;
+        *b = ansi_colors[color].b;
+    } else if (color < 232) {
+        color -= 16;
+        int temp_r = (color / 36);
+        int temp_g = ((color % 36) / 6);
+        int temp_b = (color % 6);
+        *r = temp_r ? temp_r * 40 + 55 : 0;
+        *g = temp_g ? temp_g * 40 + 55 : 0;
+        *b = temp_b ? temp_b * 40 + 55 : 0;
+    } else {
+        color -= 232;
+        *r = *g = *b = (color * 10) + 8;
+    }
 }
 
-int xterm_to_ansi(int xterm_color) {
-    const char* hex_color = xterm_hex_colors[xterm_color];
-    // xterm colors for ansi
-    static Color ansi_colors[] = {
-        {0, 0, 0,       30}, // black
-        {205, 0, 0,     31}, // red
-        {0, 205, 0,     32}, // green
-        {205, 205, 0,   33}, // yellow
-        {0, 0, 238,     34}, // blue
-        {205, 0, 205,   35}, // magenta
-        {0, 205, 205,   36}, // cyan
-        {229, 229, 229, 37}, // white
-        {127, 127, 127, 90}, // bright black
-        {255, 0, 0,     91}, // bright red
-        {0, 255, 0,     92}, // bright green
-        {255, 255, 0,   93}, // bright yellow
-        {92, 92, 255,   94}, // bright blue
-        {255, 0, 255,   95}, // bright magenta
-        {0, 255, 255,   96}, // bright cyan
-        {255, 255, 255, 97}  // bright white
-    };
+int xterm_to_ansi(int color) {
+    int r, g, b;
+    xterm_to_rgb(color, &r, &g, &b);
 
-    int r = hex_to_decimal(hex_color[1]) * 16 + hex_to_decimal(hex_color[2]);
-    int g = hex_to_decimal(hex_color[3]) * 16 + hex_to_decimal(hex_color[4]);
-    int b = hex_to_decimal(hex_color[5]) * 16 + hex_to_decimal(hex_color[6]);
-
-    double min_distance = MAX_DISTANCE;
     int nearest_color = 0;
+    double min_distance = MAX_DISTANCE;
+
     for (int i = 0; i < 16; i++) {
-        double distance = sqrt(pow(ansi_colors[i].r - r, 2) \
-                + pow(ansi_colors[i].g - g, 2) \
-                + pow(ansi_colors[i].b - b, 2));
+        Color curr = ansi_colors[i];
+        double distance = color_distance(r, g, b, curr.r, curr.g, curr.b);
         if (distance < min_distance) {
             min_distance = distance;
-            nearest_color = ansi_colors[i].code;
+            nearest_color = curr.code;
         }
     }
 
     return nearest_color;
 }
 
+/* euclidean distance */
+double color_distance(int r1, int g1, int b1, int r2, int g2, int b2) {
+    return sqrt(pow(r2 - r1, 2) + pow(b2 - b1, 2) + pow(g2 - g1, 2));
+}

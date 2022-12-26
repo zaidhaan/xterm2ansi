@@ -11,9 +11,6 @@
 #define BG_STR_LEN 5
 #define BG_DIFF 10
 
-
-extern const char *xterm_hex_colors[];
-
 typedef struct Color {
   int r;
   int g;
@@ -21,7 +18,13 @@ typedef struct Color {
   int code;
 } Color;
 
+static const Color ansi_colors[16];
+
 int get_control_sequence(char *input);
 void handle_control_sequence(char *escape_code);
+
+int xterm_to_ansi(int color);
+void xterm_to_rgb(int color, int *r, int *g, int *b);
+double color_distance(int r1, int g1, int b1, int r2, int g2, int b2);
 
 #endif
