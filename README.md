@@ -23,9 +23,6 @@ make install
 
 # TODO
 Unlikely I'll work on this for long, but might be helpful to have
-
-[ ] input specified by `-f`
-
-[ ] parse first as input if no `-f` specified
-
-[ ] help and man page?
+- [ ] input specified by `-f`
+- [ ] parse first as input if no `-f` specified
+- [ ] help and man page?
