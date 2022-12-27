@@ -12,10 +12,18 @@ $(BIN): $(OBJECTS)
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+.PHONY: test
+test:
+	cd tests && bash ./run_tests.sh
+
 .PHONY: install
 install: $(BIN)
 	install -d $(DESTDIR)/usr/local/bin
 	install -m 0755 $(BIN) $(DESTDIR)/usr/local/bin
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(DESTDIR)/usr/local/bin/$(BIN)
 
 .PHONY: clean
 clean:

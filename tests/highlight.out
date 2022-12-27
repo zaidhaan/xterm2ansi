@@ -1,0 +1,19 @@
+[35m[m[90m    1 [m[35m[m[3;36m# This is a comment[m
+[90m    2 [m[35m[m
+[90m    3 [m[35m[m[1;36mfunction[m [35mgreet[m[33m() {[m
+[90m    4 [m[35m[m  [1;32mlocal[m [35mname[m[33m=[m[35m[m[1;90m$1[m
+[90m    5 [m[35m[m  [1;32mecho[m [35m[m[33m"Hello,[m [91m$name[m[33m!"[m[35m[m
+[90m    6 [m[35m[m[33m}[m
+[90m    7 [m[35m[m
+[90m    8 [m[35m[m[1;36mfor[m [35mi[m [1;36min[m [35m[m[33m{[m[35m[m[36m1[m[35m.[m[36m.10[m[35m[m[33m};[m [35m[m[1;36mdo[m
+[90m    9 [m[35m[m  [1;36mif[m [35m[m[33m[[m [35m[m[1;90m$i[m [35m[m[1;32m-eq[m [35m[m[36m3[m [35m[m[33m] || [[m [35m[m[1;90m$i[m [35m[m[1;32m-eq[m [35m[m[36m7[m [35m[m[33m];[m [35m[m[1;36mthen[m
+[90m   10 [m[35m[m    [1;32mecho[m [35m[m[33m"Skipping number[m [91m$i[m[33m"[m[35m[m
+[90m   11 [m[35m[m    [1;32mcontinue[m
+[90m   12 [m[35m[m  [1;36melif[m [35m[m[33m[[m [35m[m[1;90m$i[m [35m[m[1;32m-gt[m [35m[m[36m5[m [35m[m[33m];[m [35m[m[1;36mthen[m
+[90m   13 [m[35m[m    [1;32mecho[m [35m[m[33m"Number[m [91m$i[m [33mis greater than 5:[m [91m$(date)[m[33m"[m[35m[m
+[90m   14 [m[35m[m    [1;32mbreak[m
+[90m   15 [m[35m[m  [1;36melse[m
+[90m   16 [m[35m    greet[m [33m"user"[m[35m[m
+[90m   17 [m[35m[m  [1;36mfi[m
+[90m   18 [m[35m[m[1;36mdone[m
+[90m   19 [m[35m[m
