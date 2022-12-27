@@ -12,7 +12,7 @@ void process_escape_code(char *escape_code) {
     int prev = 0;
     printf("\033[");
     while (i < strlen(escape_code)) {
-        char num[4] = {0};
+        char num[4] = { 0 };
         int j = 0;
         char last = 0;
         while (escape_code[i] != ';' && i < strlen(escape_code)) {
@@ -24,13 +24,13 @@ void process_escape_code(char *escape_code) {
         int code = atoi(num);
         if (fg_set) {
             printf("%d", xterm_to_ansi(code));
-            if(last) printf("%c", last);
+            if (last) printf("%c", last);
         } else if (bg_set) {
             printf("%d", xterm_to_ansi(code) + 10);
-            if(last) printf("%c", last);
+            if (last) printf("%c", last);
         } else if (code != 38 && code != 48 && prev != 38 && prev != 48) {
             printf("%d", code);
-            if(last) printf("%c", last);
+            if (last) printf("%c", last);
         }
         fg_set = (prev == 38 && code == 5);
         bg_set = (prev == 48 && code == 5);
