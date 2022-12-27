@@ -25,6 +25,39 @@ void handle_control_sequence(char *escape_code) {
     }
 }
 
+void process_escape_code(char *escape_code) {
+    int i = 0;
+    int fg_set = 0;
+    int bg_set = 0;
+    int prev = 0;
+    while (i < strlen(escape_code)) {
+        char num[4] = {0};
+        int j = 0;
+        char last = 0;
+        while (escape_code[i] != ';' && i < strlen(escape_code)) {
+            num[j++] = escape_code[i++];
+        }
+        if (i < strlen(escape_code)) {
+            last = escape_code[i];
+        }
+        int code = atoi(num);
+        if (fg_set) {
+            printf("%d", xterm_to_ansi(code));
+            if(last) printf("%c", last);
+        } else if (bg_set) {
+            printf("%d", xterm_to_ansi(code) + 10);
+            if(last) printf("%c", last);
+        } else if (code != 38 && code != 48 && prev != 38 && prev != 48) {
+            printf("%d", code);
+            if(last) printf("%c", last);
+        }
+        fg_set = (prev == 38 && code == 5);
+        bg_set = (prev == 48 && code == 5);
+        prev = code;
+        i++;
+    }
+}
+
 int main(int argc, char *argv[]) {
     FILE *input;
     char line[MAX_LINE_LENGTH];
@@ -52,54 +85,10 @@ int main(int argc, char *argv[]) {
                     strncpy(escape_code, m_pos - ec_len, ec_len);
                     escape_code[ec_len] = '\0';
 
-                    char *fg_pos = strstr(escape_code, SELECT_FG_STR);
-                    char *bg_pos = strstr(escape_code, SELECT_BG_STR);
-                    int is_fg = fg_pos != NULL;
-                    int is_bg = bg_pos != NULL;
-                    int control_seq = 0;
+                    printf("\033[");
+                    process_escape_code(escape_code);
+                    printf("m");
 
-                    int diff;
-                    if (fg_pos != NULL) {
-                        diff = fg_pos - escape_code;
-                    } else if (bg_pos != NULL) {
-                        diff = bg_pos - escape_code;
-                    } else {
-                        diff = 0;
-                    }
-                    if (diff > 0) {
-                        control_seq = atoi(escape_code);
-                        printf("\033[%dm", control_seq);
-                    }
-
-                    if (is_fg && !is_bg) {
-                        int color = atoi(escape_code + FG_STR_LEN + diff);
-                        int nearest_color = xterm_to_ansi(color);
-                        if (!control_seq) {
-                            handle_control_sequence(escape_code);
-                        }
-                        printf("\033[%dm", nearest_color);
-                    } else if (is_bg && !is_fg) {
-                        int color = atoi(escape_code + BG_STR_LEN + diff);
-                        int nearest_color = xterm_to_ansi(color);
-                        if (!control_seq) {
-                            handle_control_sequence(escape_code);
-                        }
-                        printf("\033[%dm", nearest_color + BG_DIFF);
-                    } else if (is_fg && is_bg) {
-                        int fg_color = atoi(fg_pos + FG_STR_LEN + diff);
-                        int fg_nearest_color = xterm_to_ansi(fg_color);
-
-                        int bg_color = atoi(bg_pos + BG_STR_LEN + diff);
-                        int bg_nearest_color = xterm_to_ansi(bg_color);
-
-                        printf("\033[%d;%dm", fg_nearest_color, \
-                                bg_nearest_color + BG_DIFF);
-                    } else if (strstr(escape_code, "0m") != NULL) {
-                        printf("\033[0m");
-                    } else {
-                        // unknown escape code, output as is
-                        printf("\033[%sm", escape_code);
-                    }
                     i = m_pos - line;
                 }
             } else {
