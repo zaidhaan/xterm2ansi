@@ -10,6 +10,7 @@ void process_escape_code(char *escape_code) {
     int fg_set = 0;
     int bg_set = 0;
     int prev = 0;
+    printf("\033[");
     while (i < strlen(escape_code)) {
         char num[4] = {0};
         int j = 0;
@@ -36,6 +37,7 @@ void process_escape_code(char *escape_code) {
         prev = code;
         i++;
     }
+    printf("m");
 }
 
 int main(int argc, char *argv[]) {
@@ -64,9 +66,7 @@ int main(int argc, char *argv[]) {
                     strncpy(escape_code, m_pos - ec_len, ec_len);
                     escape_code[ec_len] = '\0';
 
-                    printf("\033[");
                     process_escape_code(escape_code);
-                    printf("m");
 
                     i = m_pos - line;
                 }
