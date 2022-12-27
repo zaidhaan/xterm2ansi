@@ -5,26 +5,6 @@
 #include "xterm2ansi.h"
 #include "utils.h"
 
-int get_control_sequence(char *input) {
-    char *sc_pos = strchr(input, ';');
-    int i = 1;
-    while (sc_pos != NULL && i < 3) {
-        sc_pos = strchr(sc_pos + 1, ';');
-        i++;
-    }
-    if (sc_pos != NULL) {
-        return atoi(sc_pos + 1);
-    }
-    return -1;
-}
-
-void handle_control_sequence(char *escape_code) {
-    int control_seq = get_control_sequence(escape_code);
-    if (control_seq > 0) {
-        printf("\033[%dm", control_seq);
-    }
-}
-
 void process_escape_code(char *escape_code) {
     int i = 0;
     int fg_set = 0;
@@ -61,7 +41,6 @@ void process_escape_code(char *escape_code) {
 int main(int argc, char *argv[]) {
     FILE *input;
     char line[MAX_LINE_LENGTH];
-
 
     if (argc > 1) {
         input = fopen(argv[1], "r");

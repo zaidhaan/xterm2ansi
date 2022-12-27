@@ -5,12 +5,6 @@
 #define MAX_LINE_LENGTH 4096
 #define MAX_DISTANCE 256
 
-#define SELECT_FG_STR "38;5;"
-#define SELECT_BG_STR "48;5;"
-#define FG_STR_LEN 5
-#define BG_STR_LEN 5
-#define BG_DIFF 10
-
 typedef struct Color {
   int r;
   int g;
