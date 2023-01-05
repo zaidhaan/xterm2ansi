@@ -40,10 +40,7 @@ void xterm_to_rgb(int color, int *r, int *g, int *b) {
     }
 }
 
-int xterm_to_ansi(int color) {
-    int r, g, b;
-    xterm_to_rgb(color, &r, &g, &b);
-
+int rgb_to_ansi(int r, int g, int b) {
     int nearest_color = 0;
     double min_distance = MAX_DISTANCE;
 
@@ -57,6 +54,13 @@ int xterm_to_ansi(int color) {
     }
 
     return nearest_color;
+}
+
+int xterm_to_ansi(int color) {
+    int r, g, b;
+    xterm_to_rgb(color, &r, &g, &b);
+
+    return rgb_to_ansi(r, g, b);
 }
 
 /* euclidean distance */
